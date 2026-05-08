@@ -1,13 +1,10 @@
 ﻿<div align="center">
 
-# 🚀 AI Screenshot Answer Tool & Gemini API Server
-
+# 🚀 AI Screenshot Answer Tool
 [![Python Version](https://img.shields.io/badge/Python-3.8+-blue.svg?logo=python&logoColor=white)](https://python.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
-[![Gemini AI](https://img.shields.io/badge/AI-Google_Gemini-orange.svg?logo=google&logoColor=white)](https://gemini.google.com/)
-[![Perplexity AI](https://img.shields.io/badge/AI-Perplexity-black.svg?logo=ai&logoColor=white)](https://perplexity.ai/)
+[![Gemini CLI](https://img.shields.io/badge/AI-Google_Gemini_CLI-orange.svg?logo=google&logoColor=white)](https://gemini.google.com/)
 
-*Một hệ thống toàn diện kết hợp Desktop Client chụp ảnh màn hình giải trắc nghiệm tự động và Server REST API mạnh mẽ kết nối với Google Gemini.*
+*Công cụ chụp ảnh màn hình giải trắc nghiệm tự động, phân tích hình ảnh và trả về kết quả đáp án trực tiếp trên màn hình nền dưới dạng Overlay cực đẹp mắt.*
 
 [Tính năng](#-tính-năng-nổi-bật) • [Cài đặt](#-cài-đặt) • [Sử dụng](#-hướng-dẫn-sử-dụng) • [Cấu trúc](#-cấu-trúc-dự-án)
 </div>
@@ -16,114 +13,106 @@
 
 ## 🎨 Giới thiệu (Overview)
 
-Ứng dụng bao gồm 2 thành phần hoạt động độc lập nhưng liên kết chặt chẽ với nhau:
-1. **Desktop Client (Screenshot AI Answer)**: Công cụ chạy nền tích hợp hotkey, cho phép cắt ảnh màn hình phần thi trắc nghiệm, ngay lập tức phân tích hình ảnh (sử dụng Gemini hoặc Perplexity) và hiển thị kết quả đáp án trực tiếp trên màn hình dạng Overlay đẹp mắt.
-2. **API Server (Gemini Multi-Service API)**: Hệ thống backend xây dựng trên FastAPI, cung cấp nhiều endpoint chuyên sâu tương tác với API của Google Gemini thông qua cookie, hỗ trợ nhận diện ảnh (Vision), tệp tin (File), và xử lý đa tác vụ chuyên sâu.
+**Desktop Client (Screenshot AI Answer)** chạy nền tích hợp hotkey. Khi thi trắc nghiệm, bạn chỉ cần nhấn phím tắt, kéo chọn vùng câu hỏi, hệ thống sẽ sử dụng công cụ dòng lệnh **Gemini CLI** (và **Tesseract OCR**) để phân tích, sau đó kết xuất riêng đáp án (A/B/C/D) lơ lửng trên góc màn hình một cách vô cùng tiện lợi và tinh tế mà không bị lộ các cửa sổ UI chat khác.
 
 ## ✨ Tính năng nổi bật
 
-### 🖥️ Desktop Client
-- 📸 **Chụp màn hình thông minh**: Nhấn phím tắt để kéo chọn vùng màn hình nhanh chóng.
-- 🎯 **Trích xuất & Trả lời tự động**: Gửi hình ảnh lên AI để đọc OCR & giải câu hỏi trắc nghiệm.
-- ⚡ **Overlay siêu tốc**: Hiển thị riêng đáp án (A/B/C/D) lơ lửng trên màn hình một cách gọn gàng mà không cắt ngang luồng thao tác.
-- ⚙️ **Chế độ ẩn (Stealth)**: Hỗ trợ chạy không Console (`main.pyw`).
-
-### 🌐 Backend Server
-- 💬 **Lõi Text & Chat**: Xử lý logic, trò chuyện đa lượt, giữ vững context.
-- 👁️ **Mô-đun Vision**: Phân tích hình ảnh, đọc ảnh chụp màn hình chuẩn xác.
-- 📂 **Mô-đun File & Structured**: Hỗ trợ bóc tách thông tin, trả về cấu trúc JSON tĩnh.
-- 🛡️ **Quản lý Session**: Database SQLite đi kèm, phân quyền & lưu log kết nối thông minh.
+### 🖥️ Desktop Screenshot Tool
+- 📸 **Chụp màn hình thông minh**: Nhấn phím tắt để kéo dãn chọn vùng màn hình nhanh chóng.
+- 🎯 **Trích xuất chữ (OCR) & Trợ lý thông minh**: Hoạt động kết hợp với Tesseract OCR để nhận diện chữ trong ảnh, và đẩy lên mô hình phân tích qua CLI.
+- ⚡ **Overlay siêu tốc**: Hiển thị riêng chữ cái đáp án (A, B, C, D) lơ lửng trên màn hình (Overlay), không chặn click chuột, không cản trở thao tác thi.
+- ⚙️ **Chế độ chạy ẩn (Stealth process)**: Hỗ trợ chạy background không có khung đen Terminal thông qua `main.pyw`.
 
 ## 🛠 Yêu cầu hệ thống
 
 - **Hệ điều hành**: Windows 10/11
 - **Môi trường**: Python 3.10 trở lên
-- API Key (Perplexity) **hoặc** Tài khoản Google có cấp quyền/Cookie để sử dụng API (Gemini base).
+- **Phụ thuộc cốt lõi**: Công cụ `gemini cli` có khả dụng trong PATH.
+- **Tesseract OCR**: Cần được cài đặt sẵn trên hệ thống Windows để trích xuất text chữ.
 
 ---
 
 ## 🚀 Cài đặt (Installation)
 
-### 1. Tải dự án và Cài đặt Dependencies
+### 1. Tải dự án và Cài đặt phần mềm bắt buộc (Python Packages)
 ```bash
-# Clone source code
-git clone <đường-dẫn-repo-của-bạn>
-cd AI-Screenshot-Tool
+# Clone mã nguồn
+git clone https://github.com/hungvu25/Cheat-Exam.git
+cd Cheat-Exam
 
-# Cài đặt thư viện bắt buộc
+# Cài đặt thư viện Python (bao gồm chuột/phím, hình ảnh)
 pip install -r requirements.txt
 ```
 
-### 2. Thiết lập biến môi trường (Configuration)
+### 2. Cài đặt công cụ nền tảng (Gemini CLI và Tesseract OCR)
 
-**Cách 1: Client sử dụng dịch vụ nội bộ (Gemini Server)**
-- Đi chuyển vào thư mục `server/` và thiết lập biến môi trường (Tham khảo `server/LAY_COOKIES_MOI.md` để lấy cookie).
-- Theo mặc định, cấu hình .env trong folder server:
-```ini
-GEMINI_COOKIES=your_gemini_cookie_here
-ADMIN_KEY=your_secret_admin_key
-```
+Vì Tool hoạt động ngầm thông qua CLI và trích chữ trực tiếp từ màn hình nên cần 2 ứng dụng sau hoạt động trên Máy Windows:
 
-**Cách 2: Client gọi Perplexity trực tiếp**
-Tạo file `.env` ở **thư mục gốc** dự án (hoặc cấp quyền Command Prompt):
-```ini
-# File .env ở thư mục root
-PERPLEXITY_API_KEY=your_actual_api_key_here
+**Cài đặt Gemini CLI:**
+- Yêu cầu máy tính của bạn đã cài đặt sẵn [Node.js](https://nodejs.org/).
+- Mở Terminal (Command Prompt hoặc PowerShell) và chạy lệnh sau để tải trình CLI về máy một cách toàn cục:
+  ```bash
+  npm install -g gemini-chat-cli
+  ```
+  *(Hoặc cài đặt một package Gemini CLI tương đương tùy theo project bạn đang sử dụng, miễn sao gõ lệnh `gemini` trên Terminal chạy thành công)*.
+
+**Cài đặt Tesseract OCR:**
+- Tải bộ cài Tesseract OCR dành cho Windows tại: [UB-Mannheim Tesseract](https://github.com/UB-Mannheim/tesseract/releases/tag/v5.4.0.20240606) (Khuyên dùng bản 64-bit mới nhất).
+- Chạy trình cài đặt và làm theo hướng dẫn (bên trong mục lựa chọn Additional language data, có thể tick chọn `Vietnamese` nếu nhận diện tiếng Việt).
+- **Quan trọng:** Thêm đường dẫn `C:\Program Files\Tesseract-OCR` vào biến môi trường **PATH** của Windows.
+
+### 3. Cấu hình biến & Phím tắt (`config.py`)
+Mở file mã nguồn `config.py` ra và chỉnh sửa thông số cho hợp ý của bạn:
+```python
+# Để trống ("") để cho phép Gemini CLI tự động phân tích và chọn Model tốt nhất (Auto Mode).
+# Hoặc điền tên model cụ thể (VD: "gemini-2.5-flash-lite") nếu bạn ưu tiên tốc độ hiển thị.
+GEMINI_CLI_MODEL = ""
+
+# Phím tắt của tool để chạy chọn vùng
+DEFAULT_HOTKEY = "z"
 ```
+Không cần phải lấy Cookie từ trình duyệt hay tạo file `.env` rườm rà. Hệ thống sẽ kết xuất thẳng lên tool!
 
 ---
 
 ## 🎯 Hướng dẫn sử dụng
 
-### 1. Khởi động Server API (Tùy chọn nếu dùng Gemini) 🟢
-Di chuyển vào thư mục server và chạy FastAPI qua Uvicorn:
-```bash
-cd server
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
-> **Note:** API Docs tự động sinh tại: `http://localhost:8000/docs`
+### Khởi động Tool thi 💻
+Bạn có thể khởi chạy Desktop Tool từ thư mục dự án qua 2 cách tùy kịch bản:
 
-### 2. Khởi động Desktop Client 💻
-Bạn có thể khởi chạy Desktop Tool từ thư mục gốc thông qua nhiều hình thức:
-
-*Chế độ hiển thị Terminal (Để theo dõi log lỗi):*
+*Chế độ hiển thị Terminal (Để theo dõi tiến độ log xử lý hoặc xem lỗi nếu có):*
 ```bash
 python main.py
 ```
-*Chế độ chạy ngầm (Không hiện cửa sổ đen Console):*
+*Chế độ chạy ngầm (Không hiện bất kì cửa sổ đen Console nào - Lựa chọn số 1 khi làm bài):*
 ```bash
 python main.pyw
 ```
 
-### ⌨️ Thiết lập phím tắt
-- Vui lòng xem logs trên console hoặc tuỳ chỉnh phím tắt mặc định trong code (thông thường ấn Hotkey để khoanh chọn màn hình).
-- **`Esc`**: Tắt giao diện kết quả overlay trên màn hình.
+### ⌨️ Phím tắt hoạt động
+- Nhấn phím **`Z`** (hoặc tổ hợp phím bạn đã config) và dùng chuột khoanh vùng câu hỏi trắc nghiệm (bao gồm cả các đáp án để AI đọc).
+- Tool sẽ tốn 2-4s xử lý và bung ảnh chữ nổi A, B, C, D ra mép màn hình.
+- Phím **`Esc`**: Hủy lập tức đáp án nổi trên màn hình.
 
 ---
 
 ## 📁 Cấu trúc thư mục (Folder Structure)
 
 ```text
-📦 AI Screenshot Tool
- ┣ 📂 server/                   # Thư mục chứa API Backend (FastAPI x Gemini)
- ┃ ┣ 📂 api/                    # Core các Route API (admin, files, vision, text...)
- ┃ ┣ 📂 database/               # Database SQLite và Models
- ┃ ┣ 📂 services/               # Logic xử lý giao tiếp tích hợp AI
- ┃ ┣ 📜 README.md               # Tài liệu server chi tiết
- ┃ ┗ 📜 main.py                 # System Backend Entrypoint
- ┣ 📜 ai_client.py              # Class đảm nhiệm gọi API trên Client Desktop
- ┣ 📜 bot.py                    # Khởi tạo và định nghĩa logic cho Tool
- ┣ 📜 main.py / main.pyw        # Tool Client Entrypoint
- ┣ 📜 overlay.py                # Xử lý UX/UI (giao diện lơ lửng đáp án A, B, C, D)
- ┣ 📜 screenshot.py             # Cắt tọa độ ảnh qua Pillow & mss
- ┗ 📜 requirements.txt          # Các cài đặt thư viện hệ thống
+📦 Cheat-Exam
+ ┣ 📜 config.py                 # File cấu hình trung tâm (Hotkey, kích thước...)
+ ┣ 📜 ai_client.py              # Xử lý Logic ảnh & giao tiếp lệnh đến AI
+ ┣ 📜 main.py / main.pyw        # Trình khởi chạy Tool có / không có Console
+ ┣ 📜 overlay.py                # Xử lý Giao diện đáp án lơ lửng màn hình
+ ┣ 📜 screenshot.py             # Script trích hình tọa độ con trỏ (mss & Pillow)
+ ┗ 📜 requirements.txt          # Chứa các gói python phụ trợ Overlay / OCR
 ```
 
 ---
 
 ## 🤝 Đóng góp & Bản quyền (Contributing & License)
-- **License**: Vui lòng xem ở file phân phối. Có thể tuỳ sử dụng ở mục đích cá nhân.
-- Mọi đóng góp Pull Request giúp Code/UI overlay xinh đẹp hơn hoặc tối ưu Backend đều được hoan nghênh.
+- **License**: Vui lòng tham khảo License gốc để biết thêm cấu trúc phân phối.
+- Mọi đóng góp Pull Request giúp tính năng bắt điểm OCR nét hơn hoặc tăng tốc CLI đều vô cùng mong chờ.
 
 ---
-💖 *Nếu dự án mang lại giá trị lớn cho bạn, một nhấp Star ⭐ sẽ là động lực rất lớn tiếp thêm sức mạnh cho team phát triển!*
+💖 *Nếu dự án mang lại trải nghiệm thi cử siêu mượt và an toàn, hãy tặng kho lưu trữ một nhấp Star ⭐ khích lệ nhé!*
